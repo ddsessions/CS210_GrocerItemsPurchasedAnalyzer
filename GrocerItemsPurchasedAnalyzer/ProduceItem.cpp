@@ -1,18 +1,18 @@
 #include "ProduceItem.h"
 
 ProduceItem::ProduceItem(string t_item) {
-	m_Name = t_item;
-	m_Count = 1;
+	m_name = t_item;
+	m_count = 1;
 }
 
 void ProduceItem::AddOneToCount() {
-	m_Count++;
+	m_count++;
 }
 
 string ProduceItem::GetName() {
-	return m_Name;
+	return m_name;
 }
 
 int ProduceItem::GetCount() {
-	return m_Count;
+	return m_count;
 }

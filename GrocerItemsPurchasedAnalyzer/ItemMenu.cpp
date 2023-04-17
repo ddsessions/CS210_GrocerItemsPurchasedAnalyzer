@@ -1,15 +1,17 @@
 #include "ItemMenu.h"
 
-void ItemMenu::GetFileItems(string &fileName)
+void ItemMenu::GetFileItems(string& t_fileName)
 {
     string item;
     fstream inFileStream;
 
-    inFileStream.open(fileName, ios::in);
+    //Open the data file
+    inFileStream.open(t_fileName, ios::in);
 
+    //Make sure file opens properly
     if (!inFileStream.is_open()) {
-        cout << "Error opening file: " << fileName << endl;
-        throw runtime_error("Error opening file: " + fileName);
+        cout << "Error opening file: " << t_fileName << endl;
+        throw runtime_error("Error opening file: " + t_fileName);
     }
 
     while (getline(inFileStream, item)) {
@@ -17,22 +19,26 @@ void ItemMenu::GetFileItems(string &fileName)
     }
 }
 
-void ItemMenu::CreateBackupDatFile(string &fileName)
+void ItemMenu::CreateBackupDatFile(string &t_fileName)
 {
+    //Create a back up file for accumulated data
     fstream outFileStream;
 
-    outFileStream.open(fileName, ios::out);
+    //Make sure file opens properly
+    outFileStream.open(t_fileName, ios::out);
     if (!outFileStream.is_open()) {
-        cout << "Error opening file: " << fileName << endl;
-        throw runtime_error("Error opening file: " + fileName);
+        cout << "Error opening file: " << t_fileName << endl;
+        throw runtime_error("Error opening file: " + t_fileName);
     }
 
+    //Add produce item name, count, and histogram to the back up file
     for (auto& item : m_ProduceItems) {
         outFileStream << "Name:       " << item.GetName() << endl;
         outFileStream << "Count:      " << item.GetCount() << endl;
         outFileStream << "Histogram:  " << Utility::repeatCharNTimes(item.GetCount(), '*') << endl;
     }
 
+    //Close the back up file
     outFileStream.close();
 }
 
@@ -43,6 +49,7 @@ void ItemMenu::GetUserMenuInput()
 
     while (userInput != 4)
     {
+        //User input validation to make sure an integer 1-4 is entered
         if (userInput < 4 && userInput > 0)
         {
             system("cls");
@@ -70,20 +77,15 @@ void ItemMenu::GetUserMenuInput()
             userInput = -1;
         }
 
+        //Switch statement for the four menu options
         switch (userInput) {
         case 1:
-            /*cout << "You selected: " << userInput << endl;*/
-            //system("pause");
             printRequestedItemCount();
             break;
         case 2:
-            /*cout << "You selected: " << userInput << endl;
-            system("pause");*/
             listItemsWithCount();
             break;
         case 3:
-            /*cout << "You selected: " << userInput << endl;
-            system("pause");*/
             listItemsWithHistogram();
             break;
         default:

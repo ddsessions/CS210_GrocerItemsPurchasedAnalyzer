@@ -12,29 +12,34 @@ class ItemMenu
 {
 public:
     ItemMenu() {};
-    void GetFileItems(string& fileName);
-    void CreateBackupDatFile(string& fileName);
+    //Get produce items from input file
+    void GetFileItems(string& t_fileName);
+    //Create a formatted back up file for acculuated data
+    void CreateBackupDatFile(string& t_fileName);
+    //Get user input
 	void GetUserMenuInput();
 
 private:
+    //Create a vector of produce item
 	vector<ProduceItem> m_ProduceItems;
 
-    void CreateListOfProduceItem(string& item) {
-        vector<ProduceItem> produceItems;
+    //Method to create a vector of produce item
+    //If item is not on the vector, add item to the vector
+    //If item is on the vector, increment item by one
+    void CreateListOfProduceItem(string& t_item) {
         //Source: https://stackoverflow.com/a/15518039
-        auto it = find_if(m_ProduceItems.begin(), m_ProduceItems.end(), [&item](ProduceItem& obj) {return obj.GetName() == item;});
+        auto it = find_if(m_ProduceItems.begin(), m_ProduceItems.end(), [&t_item](ProduceItem& obj) {return obj.GetName() == t_item;});
 
         if (it != m_ProduceItems.end())
         {
             it._Ptr->AddOneToCount();
         }
         else {
-            m_ProduceItems.emplace_back(ProduceItem(
-                item
-            ));
+            m_ProduceItems.emplace_back(ProduceItem(t_item));
         }
     }
 
+    //Method to create the main menu for the user
     static void displayMenu() {
         string menuItemOne = "1. Item Search";
         string menuItemTwo = "2. List Items Count";
@@ -67,20 +72,24 @@ private:
         cout << Utility::repeatCharNTimes(47, '*') << endl;
         cout << hintText << endl;
         cout << Utility::repeatCharNTimes(47, '*') << endl;
+        cout << endl;
     }
 
+    //Method to create the Item Search screen
     void printRequestedItemCount() {
         string userInput;
         /*
                         ***********************************************
                         **********        Item Search        **********
                         ***********************************************
+                        
                         Enter Item:
         */
         system("cls");
         cout << Utility::repeatCharNTimes(47, '*') << endl;
         cout << Utility::repeatCharNTimes(10, '*') << Utility::repeatCharNTimes(8, ' ') << "Item Search" << Utility::repeatCharNTimes(8, ' ') << Utility::repeatCharNTimes(10, '*') << endl;
         cout << Utility::repeatCharNTimes(47, '*') << endl;
+        cout << endl;
         cout << "Enter Item: ";
         cin >> userInput;
         cout << endl;
@@ -92,6 +101,7 @@ private:
             cout << it._Ptr->GetName() << ": " << it._Ptr->GetCount() << endl;
             cout << endl;
         }
+        //User input validation if the item is not in the vector
         else {
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
             cout << "There are no items that match the word ";
@@ -103,6 +113,7 @@ private:
         system("pause");
     }
 
+    //Method to create the Item Counts screen
     void listItemsWithCount() {
         /*
                         ***********************************************
@@ -117,7 +128,7 @@ private:
         cout << Utility::repeatCharNTimes(47, '*') << endl;
         cout << endl;
 
-        //Get largest string size
+        //Get largest string size for formatting
         int largestStringSize = 0;
         for (auto& item : m_ProduceItems) {
             int stringSize = item.GetName().size();
@@ -136,6 +147,7 @@ private:
         system("pause");
     }
 
+    //Method to create the Item Histogram screen
     void listItemsWithHistogram() {
         /*
                         ***********************************************
@@ -150,7 +162,7 @@ private:
         cout << Utility::repeatCharNTimes(47, '*') << endl;
         cout << endl;
 
-        //Get largest string size
+        //Get largest string size for formatting
         int largestStringSize = 0;
         for (auto& item : m_ProduceItems) {
             int stringSize = item.GetName().size();
@@ -163,6 +175,7 @@ private:
             int amountOfSpace = (largestStringSize - item.GetName().size());
             cout << Utility::repeatCharNTimes(amountOfSpace, ' ') << item.GetName() << " ";
 
+            //Color code the histogram asterisks based on frequency
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), item.GetCount());
             cout << Utility::repeatCharNTimes(item.GetCount(), '*') << endl;
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
